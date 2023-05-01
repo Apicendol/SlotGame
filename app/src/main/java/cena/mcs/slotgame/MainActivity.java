@@ -2,23 +2,29 @@ package cena.mcs.slotgame;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Thread t1, t2, t3;
     Handler h1, h2, h3;
     int id = 1;
+//    int id;
     private ImageView imgSlot1;
     private ImageView imgSlot2;
     private ImageView imgSlot3;
     private Button btnStart;
 
+//    private int[] images = new int[9];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+//        Random random = new Random();
         btnStart.setText("Stop");
         if (this.t1 != null && this.t1.isAlive()) {
             this.t1.interrupt();
@@ -48,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if (this.t3 != null && this.t3.isAlive()) {
             this.t3.interrupt();
+            this.checkWinningCombination();
             btnStart.setText("Start Again");
             return;
         }
@@ -65,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 imgSlot1.setImageResource(Helper.getIcon(id));
                             }
                         });
-                        Thread.sleep(100);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         break;
                     }
@@ -86,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 imgSlot2.setImageResource(Helper.getIcon(id));
                             }
                         });
-                        Thread.sleep(100);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         break;
                     }
@@ -107,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 imgSlot3.setImageResource(Helper.getIcon(id));
                             }
                         });
-                        Thread.sleep(100);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         break;
                     }
@@ -118,5 +126,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.t1.start();
         this.t2.start();
         this.t3.start();
+    }
+
+    private void checkWinningCombination() {
+        if (imgSlot1.getDrawable().getConstantState().equals(imgSlot2.getDrawable().getConstantState())
+        && imgSlot1.getDrawable().getConstantState().equals(imgSlot3.getDrawable().getConstantState())) {
+            Toast.makeText(this, "Congratulations! You Win!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Try Again", Toast.LENGTH_SHORT).show();
+        }
     }
 }
